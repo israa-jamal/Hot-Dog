@@ -20,10 +20,10 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         imagePicker.sourceType = .camera
         imagePicker.allowsEditing = false
     }
-
+    
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let pickedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage{
-        ImageView.image = pickedImage
+            ImageView.image = pickedImage
             guard let ciImage = CIImage(image: pickedImage) else{
                 fatalError("Taken image can't be converted to CIImage")
             }
@@ -42,7 +42,13 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             guard let results = request.results as? [VNClassificationObservation] else {
                 fatalError("Model couldn't process Image")
             }
-            print(results)
+            if let firstResult = results.first{
+                if firstResult.identifier.contains("hotdog"){
+                    self.navigationItem.title = "Hotodg!"
+                }else {
+                    self.navigationItem.title = "Not Hotodg!"
+                }
+            }
         }
         
         let handler = VNImageRequestHandler(ciImage: image)
