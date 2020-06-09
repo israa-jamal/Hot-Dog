@@ -24,10 +24,10 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         super.viewDidLoad()
         
         imagePicker.delegate = self
-        imagePicker.sourceType = .camera
+        imagePicker.sourceType = .photoLibrary
         imagePicker.allowsEditing = false
         
-        //show camera as soon as the app launches 
+        //show camera as soon as the app launches
         present(imagePicker, animated: true, completion: nil)
         
         labelView.isHidden = true
@@ -66,9 +66,11 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             if let firstResult = results.first{
                 if firstResult.identifier.contains("hotdog"){
                     self.labelView.text = "Hotodg!"
+                    self.labelView.backgroundColor = #colorLiteral(red: 0.2658653855, green: 0.7634820342, blue: 0.2576112449, alpha: 1)
                     self.hotdogIcon.image = #imageLiteral(resourceName: "HotDog")
                 }else {
                     self.labelView.text = "Not Hotodg!"
+                    self.labelView.backgroundColor = #colorLiteral(red: 0.9785731435, green: 0.06647058576, blue: 0, alpha: 1)
                     self.hotdogIcon.image = #imageLiteral(resourceName: "NotHotDog")
                 }
             }
