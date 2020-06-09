@@ -11,6 +11,8 @@ import CoreML
 import Vision
 
 class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    @IBOutlet weak var hotdogIconImageView: UIImageView!
+    @IBOutlet weak var labelView: UILabel!
     @IBOutlet weak var ImageView: UIImageView!
     let imagePicker = UIImagePickerController()
     override func viewDidLoad() {
@@ -19,6 +21,10 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         imagePicker.delegate = self
         imagePicker.sourceType = .camera
         imagePicker.allowsEditing = false
+        present(imagePicker, animated: true, completion: nil)
+        labelView.isHidden = true
+        hotdogIconImageView.isHidden = true
+        hotdogIconImageView.layer.cornerRadius = hotdogIconImageView.frame.size.height/2
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
@@ -42,11 +48,14 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             guard let results = request.results as? [VNClassificationObservation] else {
                 fatalError("Model couldn't process Image")
             }
+            self.labelView.isHidden = false
+            self.hotdogIconImageView.isHidden = false
             if let firstResult = results.first{
                 if firstResult.identifier.contains("hotdog"){
-                    self.navigationItem.title = "Hotodg!"
-                }else {
-                    self.navigationItem.title = "Not Hotodg!"
+                    self.labelView.text = "Hotodg!"
+                    self.hotdogIconImageView.image = #imageLiteral(resourceName: "HotDog")                }else {
+                    self.labelView.text = "Not Hotodg!"
+                    self.hotdogIconImageView.image = #imageLiteral(resourceName: "NotHotDog")
                 }
             }
         }
