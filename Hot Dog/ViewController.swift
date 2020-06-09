@@ -11,23 +11,33 @@ import CoreML
 import Vision
 
 class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-    @IBOutlet weak var hotdogIconImageView: UIImageView!
+    
+    @IBOutlet weak var hotdogIcon: UIImageView!
     @IBOutlet weak var labelView: UILabel!
+    @IBOutlet weak var cameraButton: UIBarButtonItem!
     @IBOutlet weak var ImageView: UIImageView!
+    
     let imagePicker = UIImagePickerController()
+    
     override func viewDidLoad() {
+        
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        
         imagePicker.delegate = self
         imagePicker.sourceType = .camera
         imagePicker.allowsEditing = false
+        
+        //show camera as soon as the app launches 
         present(imagePicker, animated: true, completion: nil)
+        
         labelView.isHidden = true
-        hotdogIconImageView.isHidden = true
-        hotdogIconImageView.layer.cornerRadius = hotdogIconImageView.frame.size.height/2
+        hotdogIcon.isHidden = true
+        //make hotdogIcon circled
+        hotdogIcon.layer.cornerRadius = hotdogIcon.frame.size.height/2
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        
         if let pickedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage{
             ImageView.image = pickedImage
             guard let ciImage = CIImage(image: pickedImage) else{
@@ -40,22 +50,26 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
     
     func detect (image : CIImage){
-        
+        // loading Inceptionv3 model
         guard let model = try? VNCoreMLModel(for: Inceptionv3().model) else {
             fatalError("Couldn't load CoreML model")
         }
+        //process the takken image
         let request = VNCoreMLRequest(model: model) { (request, error) in
             guard let results = request.results as? [VNClassificationObservation] else {
                 fatalError("Model couldn't process Image")
             }
+            //after processing image show the label and the hot dog icon
             self.labelView.isHidden = false
-            self.hotdogIconImageView.isHidden = false
+            self.hotdogIcon.isHidden = false
+            
             if let firstResult = results.first{
                 if firstResult.identifier.contains("hotdog"){
                     self.labelView.text = "Hotodg!"
-                    self.hotdogIconImageView.image = #imageLiteral(resourceName: "HotDog")                }else {
+                    self.hotdogIcon.image = #imageLiteral(resourceName: "HotDog")
+                }else {
                     self.labelView.text = "Not Hotodg!"
-                    self.hotdogIconImageView.image = #imageLiteral(resourceName: "NotHotDog")
+                    self.hotdogIcon.image = #imageLiteral(resourceName: "NotHotDog")
                 }
             }
         }
@@ -69,9 +83,11 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         
     }
     
+    
     @IBAction func cameraPressed(_ sender: UIBarButtonItem) {
+        //show camera
         present(imagePicker, animated: true, completion: nil)
     }
-    
+   
 }
 
