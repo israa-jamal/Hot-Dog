@@ -1,7 +1,7 @@
 # Hot Dog iOS App
 ### You can use your camera to see if a certain thing is a hot dog or not. 
 **This app idea is from Sillicon Valley (TV Series).** <br/>
-**It is implemnted using CoreML with Inceptionv3 Model.** 
+**It is implemented using CoreML with Inceptionv3 Model.** 
 ## Screenshots :
 <img src="https://github.com/israa-jamal/Hot-Dog/blob/master/HotDog.jpg" width="300" > <img src="https://github.com/israa-jamal/Hot-Dog/blob/master/NotHotDog.jpg" width="300" >
 
